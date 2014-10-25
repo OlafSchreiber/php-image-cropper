@@ -42,7 +42,7 @@ require_once('functions.php');
         if ($extension == 'jpg') {
 
             if (!IsCroppedFileName($appendToFilename, $file)) {
-                echo '<div style="font-size: 0.8em;">' . $file . '<br /><a href="cropper.php?f=' . $file . '"><img src="' . $folder . $file . '" style="width:' . $targ_w . 'px" /></a>';
+                echo '<div style="font-size: 0.8em;">' . $file . '<br /><a href="' . $cropperToUse . '?f=' . $file . '"><img src="' . $folder . $file . '" style="width:' . $targ_w . 'px" /></a>';
                 $croppedFilename = GetCroppedFileName($appendToFilename, $file);
                 if (file_exists($folder . $croppedFilename)) {
                     echo '<br /><img src="' . $folder . $croppedFilename . '" />';

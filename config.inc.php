@@ -8,11 +8,13 @@
 
 session_start();
 
+$cropperToUse = 'cropper_w_preview.php';
+
 $show_w = 600;
 
 $aspectRatio = 1.5;
 $targ_w = 300;
 $targ_h = $targ_w/$aspectRatio;
 $jpeg_quality = 85;
-$folder = 'images/';
+$folder = 'testimages/';
 $appendToFilename = '_cropped';

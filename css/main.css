@@ -427,8 +427,8 @@ a:hover {
   float: right;
 }
 .container {
-  margin-right: auto;
-  margin-left: auto;
+  /*margin-right: auto;*/
+  /*margin-left: auto;*/
   *zoom: 1;
 }
 .container:before,
