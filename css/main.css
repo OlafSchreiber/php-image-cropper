@@ -1,14 +1,3 @@
-/* Jcrop Demo Site CSS - 2012 Tapmodo Interactive LLC - MIT License
-   Not required to run Jcrop - contains twitter bootstrap code */
-/*!
- * Bootstrap v2.2.1
- *
- * Copyright 2012 Twitter, Inc
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
- */
 article,
 aside,
 details,
@@ -125,7 +114,7 @@ textarea {
   box-sizing: border-box;
 }
 body {
-  margin: 0;
+  margin: 10;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
@@ -4994,3 +4983,4 @@ a.badge:hover {
 .modal-body {
   max-height: 60%;
 }
+

@@ -1,7 +1,6 @@
 <?php
-session_start();
-
 require_once('config.inc.php');
+require_once('functions.php');
 
 $fileToCrop = isset($_GET['f']) ? $_GET['f'] : (isset($_SESSION['file']) ? $_SESSION['file'] : '');
 
@@ -14,13 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img_r = imagecreatefromjpeg($src);
     $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
 
+    #echo $_POST['x'] .'<br>', $_POST['y'] . '<br>', $targ_w . '<br>', $targ_h . '<br>', $_POST['w'] . '<br>', $_POST['h'] . '<br>';
     imagecopyresampled($dst_r, $img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
 
-    $extension = pathinfo($src, PATHINFO_EXTENSION);
-    $saveName = str_replace(".$extension", "$appendToFilename.$extension", $src);
-    imagejpeg($dst_r, $saveName, $jpeg_quality);
+    $saveName = GetCroppedFileName($appendToFilename, $fileToCrop);
+    imagejpeg($dst_r, $folder . $saveName, $jpeg_quality);
 
-    $message = 'Datei gespeichert als ' . $saveName;
+    header('location:index.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -31,33 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.Jcrop.js"></script>
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
-
     <link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css"/>
 
     <script type="text/javascript">
 
         jQuery(function ($) {
-
-            $(function () {
-                $('#target').Jcrop({
-                    aspectRatio: <?php echo $aspectRatio; ?>,
-                    onSelect: updateCoords
-                });
-            });
-
-            function updateCoords(c) {
-                $('#x').val(c.x);
-                $('#y').val(c.y);
-                $('#w').val(c.w);
-                $('#h').val(c.h);
-            }
-
-            function checkCoords() {
-                if (parseInt($('#w').val())) return true;
-                alert('Bitte eine Region mit der Maus auswählen!');
-                return false;
-            }
-
 
             // Create variables (in this scope) to hold the API and image size
             var jcrop_api,
@@ -100,20 +78,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         marginLeft: '-' + Math.round(rx * c.x) + 'px',
                         marginTop: '-' + Math.round(ry * c.y) + 'px'
                     });
+                    $('#x').val(c.x);
+                    $('#y').val(c.y);
+                    $('#w').val(c.w);
+                    $('#h').val(c.h);
                 }
             };
-
         });
+
+
+        function checkCoords() {
+            if (parseInt($('#w').val())) return true;
+            alert('Bitte eine Region mit der Maus auswählen!');
+            return false;
+        }
 
     </script>
 
     <style type="text/css">
         #target {
             background-color: #ccc;
-            width: 500px;
-            height: 330px;
+            width: <?php echo $show_w; ?>px;
             font-size: 24px;
             display: block;
+        }
+
+        #preview-pane .preview-container {
+            width: <?php echo $targ_w; ?>px;
+            height: <?php echo $targ_h; ?>px;
+            overflow: hidden;
         }
 
         /* Apply these styles only when #preview-pane has
@@ -123,36 +116,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             position: absolute;
             z-index: 2000;
             top: 10px;
-            right: -280px;
-            padding: 6px;
+            right: -<?php echo $targ_w + 30; ?>px;
+            padding: 0px;
             border: 1px rgba(0, 0, 0, .4) solid;
             background-color: white;
-
-            -webkit-border-radius: 6px;
-            -moz-border-radius: 6px;
-            border-radius: 6px;
-
-            -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-            -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-            box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
         }
-
-        /* The Javascript code will set the aspect ratio of the crop
-           area based on the size of the thumbnail preview,
-           specified here */
-        #preview-pane .preview-container {
-            width: 250px;
-            height: 170px;
-            overflow: hidden;
-        }
-
     </style>
 
 </head>
 <body>
 <h2>Bild croppen</h2>
 <?php echo $message; ?><br/>
-<a href="index.php">Zurück</a><br />
+<a href="index.php">Zurück</a><br/>
 
 <div class="container">
     <div class="row">
