@@ -12,8 +12,8 @@ $cropperToUse = 'cropper_w_preview.php';
 
 $show_w = 600;
 
-$aspectRatio = 1.5;
-$targ_w = 300;
+$aspectRatio = 1.666666666666;
+$targ_w = 250;
 $targ_h = $targ_w/$aspectRatio;
 $jpeg_quality = 85;
 $folder = 'testimages/';
