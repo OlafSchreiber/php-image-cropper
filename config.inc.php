@@ -5,7 +5,8 @@
  * Date: 25.10.2014
  * Time: 09:46
  */
-
+header('Cache-Control: no-cache');
+header('Pragma: no-cache');
 session_start();
 
 $cropperToUse = 'cropper_w_preview.php';
